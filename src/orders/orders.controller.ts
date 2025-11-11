@@ -5,6 +5,7 @@ import { User } from "src/auth/decorators/logged-user.decorator";
 import { User as loggedUser } from "src/auth/domain/entities/user.entity";
 import { AuthGuard } from "src/auth/guard/auth.guard";
 import { Roles } from "src/auth/decorators/roles.decorator";
+import { Role } from "src/auth/enums/role.enum";
 
 @Controller("orders")
 export class OrdersController {
@@ -12,7 +13,7 @@ export class OrdersController {
 
   @Post("/")
   @UseGuards(AuthGuard)
-  @Roles("USER")
+  @Roles(Role.USER)
   async createOrder(@Body() body: CreateOrderDto, @User() user: loggedUser) {
     return await this.ordersService.createOrder(body as any, user.id);
   }
