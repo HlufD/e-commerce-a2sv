@@ -1,6 +1,6 @@
-import { Injectable } from '@nestjs/common';
-import { JwtService, JwtSignOptions } from '@nestjs/jwt';
-import { IJwtService } from '../interfaces/IJwtService';
+import { Injectable } from "@nestjs/common";
+import { JwtService, JwtSignOptions } from "@nestjs/jwt";
+import { IJwtService } from "../interfaces/IJwtService";
 
 @Injectable()
 export class JwtServiceImpl implements IJwtService {
