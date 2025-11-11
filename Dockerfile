@@ -1,5 +1,5 @@
 # 1. Build stage
-FROM node:20-alpine AS builder
+FROM node:20-alpine AS e-commerce
 WORKDIR /app
 
 # Install pnpm globally
@@ -24,10 +24,10 @@ WORKDIR /app
 # Install pnpm globally (needed for node_modules)
 RUN npm install -g pnpm
 
-# Copy dependencies + build output from builder
-COPY --from=builder /app/node_modules ./node_modules
-COPY --from=builder /app/dist ./dist
-COPY --from=builder /app/prisma ./prisma
+# Copy dependencies + build output from e-commerce
+COPY --from=e-commerce /app/node_modules ./node_modules
+COPY --from=e-commerce /app/dist ./dist
+COPY --from=e-commerce /app/prisma ./prisma
 
 ENV NODE_ENV=production
 EXPOSE 3000
