@@ -79,7 +79,7 @@ export class AuthService {
 
     const jwtToke = await this.jwtService.sign(data, {
       secret: process.env.JWT_SECRET,
-      expiresIn: "1d",
+      expiresIn: Number(process.env.JWT_TTL) || "1d",
     });
 
     return {
