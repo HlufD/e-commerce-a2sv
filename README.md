@@ -87,6 +87,7 @@ This structure ensures:
   - [Development Mode](#development-mode)
   - [Production Mode](#production-mode)
 
+- [Swagger API Documentation](#swagger-api-documentation)
 - [Testing](#testing)
 - [Linting and Formatting](#linting-and-formatting)
 
@@ -170,6 +171,20 @@ npm run start:prod
 pnpm build
 pnpm start:prod
 ```
+
+---
+
+## Swagger API Documentation
+
+The API is documented using **Swagger**. Once the server is running, you can access the Swagger UI at:
+
+```
+http://localhost:3000/api#/
+```
+
+Swagger provides a complete overview of all endpoints, request/response schemas, and allows you to test the API directly from the browser.
+
+> **Note:** Protected endpoints require JWT authorization. Use the **Authorize** button in Swagger to enter your JWT token.
 
 ---
 
