@@ -8,7 +8,7 @@ export interface IOrderRepository {
     page: number,
     limit: number,
     userId: string,
-    search?: string
+    search?: string,
   ): Promise<PaginatedResponse<Order>>;
 }
 

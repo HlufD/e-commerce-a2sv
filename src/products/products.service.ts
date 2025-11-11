@@ -10,7 +10,7 @@ import { Product } from "./domain/entities/product.entity";
 export class ProductsService {
   constructor(
     @Inject(IProductRepositoryToken)
-    private readonly productRepository: IProductRepository
+    private readonly productRepository: IProductRepository,
   ) {}
 
   async createProduct(payload: Product, userId: string) {
@@ -88,7 +88,7 @@ export class ProductsService {
       const { data, ...rest } = await this.productRepository.findAll(
         page,
         limit,
-        search
+        search,
       );
 
       return {

@@ -9,7 +9,7 @@ import { Order } from "./domain/entities/order.entity";
 export class OrdersService {
   constructor(
     @Inject(IOrderRepositoryToken)
-    private readonly orderRepository: IOrderRepository
+    private readonly orderRepository: IOrderRepository,
   ) {}
 
   async createOrder(payload: Partial<Order>, userId: string) {
@@ -28,7 +28,7 @@ export class OrdersService {
 
   async getOrders(
     query: { page: number; limit: number; search?: string },
-    userId: string
+    userId: string,
   ) {
     try {
       const { page, limit, search } = query;
@@ -37,7 +37,7 @@ export class OrdersService {
         page,
         limit,
         userId,
-        search
+        search,
       );
 
       return {

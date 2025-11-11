@@ -26,7 +26,7 @@ class SignupDto {
     {
       message:
         "Password must include uppercase, lowercase, number, and special character",
-    }
+    },
   )
   password: string;
 }

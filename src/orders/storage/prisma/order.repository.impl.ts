@@ -27,7 +27,7 @@ export class OrderPrismaRepositoryImpl implements IOrderRepository {
           const quantity = (orderItem as any).quantity;
           if (quantity > product.stock) {
             throw new Error(
-              `Insufficient stock for product "${product.name}". Requested: ${quantity}, Available: ${product.stock}`
+              `Insufficient stock for product "${product.name}". Requested: ${quantity}, Available: ${product.stock}`,
             );
           }
 
@@ -66,7 +66,7 @@ export class OrderPrismaRepositoryImpl implements IOrderRepository {
   async findAll(
     page: number,
     limit: number,
-    userId: string
+    userId: string,
   ): Promise<PaginatedResponse<Order>> {
     try {
       return await Paginator.paginate<Order>(
@@ -82,7 +82,7 @@ export class OrderPrismaRepositoryImpl implements IOrderRepository {
           }),
         () => this.prismaService.order.count(),
         page,
-        limit
+        limit,
       );
     } catch (error) {
       console.error(error);

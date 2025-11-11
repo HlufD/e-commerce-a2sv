@@ -1,6 +1,6 @@
-import { Module } from '@nestjs/common';
-import { HashingServiceImpl } from './utils/hashing.service';
-import { JwtService } from '@nestjs/jwt';
+import { Module } from "@nestjs/common";
+import { HashingServiceImpl } from "./utils/hashing.service";
+import { JwtService } from "@nestjs/jwt";
 
 @Module({
   providers: [HashingServiceImpl, JwtService],

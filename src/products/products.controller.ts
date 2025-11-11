@@ -31,7 +31,7 @@ export class ProductsController {
   @UseGuards(AuthGuard)
   async createProduct(
     @Body() body: CreateProductDto,
-    @User() user: loggedUser
+    @User() user: loggedUser,
   ) {
     return this.productsService.createProduct(body as Product, user.id);
   }

@@ -28,7 +28,7 @@ export class AuthService {
     @Inject(IHashingServiceToken)
     private readonly hashingService: IHashingService,
 
-    @Inject(IJwtServiceToken) private readonly jwtService: IJwtService
+    @Inject(IJwtServiceToken) private readonly jwtService: IJwtService,
   ) {}
 
   async singUp(payload: SignupDto) {
@@ -48,7 +48,7 @@ export class AuthService {
     const data = await this.userRepository.create(
       email,
       passwordHash,
-      username
+      username,
     );
     return {
       status: 201,
@@ -65,7 +65,7 @@ export class AuthService {
 
     const passwordMatch = await this.hashingService.compare(
       password,
-      user.password!
+      user.password!,
     );
 
     if (!passwordMatch) throw new UnauthorizedException("invalid credentials");

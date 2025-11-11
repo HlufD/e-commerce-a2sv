@@ -18,14 +18,14 @@ import {
 export class AuthGuard implements CanActivate {
   constructor(
     @Inject(IJwtServiceToken) private readonly jwtService: IJwtService,
-    private readonly reflector: Reflector
+    private readonly reflector: Reflector,
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest<Request>();
     const requiredRoles = this.reflector.getAllAndOverride<string[]>(
       ROLES_KEY,
-      [context.getHandler(), context.getClass()]
+      [context.getHandler(), context.getClass()],
     );
 
     const token = this.extractToken(request);
@@ -49,7 +49,7 @@ export class AuthGuard implements CanActivate {
 
     if (!hasRole) {
       throw new ForbiddenException(
-        `Access denied: requires ${requiredRoles.join(", ")} role.`
+        `Access denied: requires ${requiredRoles.join(", ")} role.`,
       );
     }
 

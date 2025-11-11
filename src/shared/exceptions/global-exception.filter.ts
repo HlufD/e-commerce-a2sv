@@ -42,7 +42,7 @@ export class GlobalExceptionFilter implements ExceptionFilter {
   }
 
   private getPrismaErrorMessage(
-    exception: Prisma.PrismaClientKnownRequestError
+    exception: Prisma.PrismaClientKnownRequestError,
   ) {
     switch (exception.code) {
       case "P2002":

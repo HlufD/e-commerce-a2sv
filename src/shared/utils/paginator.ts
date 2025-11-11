@@ -11,7 +11,7 @@ export class Paginator<T> {
     getItems: (skip: number, take: number) => Promise<T[]>,
     getTotalCount: () => Promise<number>,
     page = 1,
-    pageSize = 10
+    pageSize = 10,
   ): Promise<PaginatedResponse<T>> {
     const skip = (page - 1) * pageSize;
 

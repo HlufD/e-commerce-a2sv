@@ -9,7 +9,7 @@ export interface IProductRepository {
   findAll(
     page,
     limit: number,
-    search?: string
+    search?: string,
   ): Promise<PaginatedResponse<Product>>;
 
   update(id: string, product: Partial<Product>): Promise<Product>;

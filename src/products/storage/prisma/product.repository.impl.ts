@@ -42,7 +42,7 @@ export class ProductPrismaRepository implements IProductRepository {
   async findAll(
     page = 1,
     limit = 10,
-    search?: string
+    search?: string,
   ): Promise<PaginatedResponse<Product>> {
     try {
       const where: Prisma.ProductWhereInput =
@@ -65,7 +65,7 @@ export class ProductPrismaRepository implements IProductRepository {
           }),
         () => this.prismaService.product.count({ where }),
         page,
-        limit
+        limit,
       );
     } catch (error) {
       console.log(error);

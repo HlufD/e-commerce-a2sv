@@ -17,7 +17,7 @@ export class AuthPrismaRepository implements IUserRepository {
   async create(
     email: string,
     password: string,
-    username?: string
+    username?: string,
   ): Promise<User> {
     try {
       const user = await this.prismaService.user.create({

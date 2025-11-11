@@ -3,4 +3,4 @@ export interface IHashingService {
   compare(password: string, hash: string): Promise<boolean>;
 }
 
-export const IHashingServiceToken = Symbol('IHashingService');
+export const IHashingServiceToken = Symbol("IHashingService");
