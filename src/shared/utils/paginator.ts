@@ -6,7 +6,7 @@ export interface PaginatedResponse<T> {
   data: T[];
 }
 
-export class Paginator<T> {
+export class Paginator {
   static async paginate<T>(
     getItems: (skip: number, take: number) => Promise<T[]>,
     getTotalCount: () => Promise<number>,
