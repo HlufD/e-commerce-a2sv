@@ -1,4 +1,8 @@
-import { Injectable } from "@nestjs/common";
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from "@nestjs/common";
 import { Order } from "src/orders/domain/entities/order.entity";
 import { IOrderRepository } from "src/orders/domain/interfaces/order.repository";
 import { PrismaService } from "src/prisma/prisma.service";
@@ -21,13 +25,15 @@ export class OrderPrismaRepositoryImpl implements IOrderRepository {
         for (const orderItem of order.products) {
           const product = productsInDb.find((p) => p.id === orderItem.id);
           if (!product) {
-            throw new Error(`Product with id ${orderItem.id} not found`);
+            throw new NotFoundException(
+              `Product with id ${orderItem.id} not found`
+            );
           }
 
           const quantity = (orderItem as any).quantity;
           if (quantity > product.stock) {
-            throw new Error(
-              `Insufficient stock for product "${product.name}". Requested: ${quantity}, Available: ${product.stock}`,
+            throw new BadRequestException(
+              `Insufficient stock for product "${product.name}". Requested: ${quantity}, Available: ${product.stock}`
             );
           }
 
@@ -66,7 +72,7 @@ export class OrderPrismaRepositoryImpl implements IOrderRepository {
   async findAll(
     page: number,
     limit: number,
-    userId: string,
+    userId: string
   ): Promise<PaginatedResponse<Order>> {
     try {
       return await Paginator.paginate<Order>(
@@ -82,7 +88,7 @@ export class OrderPrismaRepositoryImpl implements IOrderRepository {
           }),
         () => this.prismaService.order.count(),
         page,
-        limit,
+        limit
       );
     } catch (error) {
       console.error(error);

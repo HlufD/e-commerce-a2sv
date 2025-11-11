@@ -17,18 +17,26 @@ import {
   CreateProductDto,
   GetProductsDto,
   UpdateProductDto,
-} from "./dto/product.dto";
+} from "./dto/product-request.dto";
 import { Product } from "generated/prisma";
 import { User } from "src/auth/decorators/logged-user.decorator";
 import { User as loggedUser } from "src/auth/domain/entities/user.entity";
 import { AuthGuard } from "src/auth/guard/auth.guard";
 import { UploadFile } from "./decorators/file-upload.decorator";
+import {
+  ApiCreateProduct,
+  ApiDeleteProduct,
+  ApiGetProduct,
+  ApiGetProducts,
+  ApiUpdateProduct,
+} from "./decorators/swagger.decorator";
 
 @Controller("products")
 export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}
 
   @Post("/")
+  @ApiCreateProduct()
   @Roles(Role.ADMIN)
   @UseGuards(AuthGuard)
   @UploadFile({ fieldName: "image", folder: "products", maxSizeMB: 2 })
@@ -47,6 +55,7 @@ export class ProductsController {
     return this.productsService.createProduct(product, user.id);
   }
 
+  @ApiUpdateProduct()
   @Put("/:id")
   @Roles(Role.ADMIN)
   @UseGuards(AuthGuard)
@@ -65,16 +74,19 @@ export class ProductsController {
     return this.productsService.updateProduct(product, id);
   }
 
+  @ApiDeleteProduct()
   @Delete("/:id")
   async deleteProduct(@Param("id") id: string) {
     return this.productsService.deleteProduct(id);
   }
 
+  @ApiGetProduct()
   @Get("/:id")
   async getProduct(@Param("id") id: string) {
     return this.productsService.getProduct(id);
   }
 
+  @ApiGetProducts()
   @Get("/")
   async getProducts(@Query() query: GetProductsDto) {
     return this.productsService.getProducts(query as any);

@@ -15,7 +15,19 @@ async function bootstrap() {
     .setDescription("This is authentication micro service for vibe call app")
     .setVersion("1.0")
     .addTag("E-Commerce")
+    .addBearerAuth(
+      {
+        type: "http",
+        scheme: "bearer",
+        bearerFormat: "JWT",
+        name: "Authorization",
+        description: "Enter JWT token",
+        in: "header",
+      },
+      "JWT-auth"
+    )
     .build();
+
   const documentFactory = () => SwaggerModule.createDocument(app, config);
   SwaggerModule.setup("api", app, documentFactory);
 
