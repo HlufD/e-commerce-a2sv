@@ -42,7 +42,7 @@ export class OrdersService {
 
       return {
         status: 200,
-        message: "Orders found successfully",
+        message: "Orders fetched successfully",
         data,
         ...rest,
       };

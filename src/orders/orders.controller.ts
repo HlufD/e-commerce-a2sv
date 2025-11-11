@@ -12,13 +12,14 @@ export class OrdersController {
 
   @Post("/")
   @UseGuards(AuthGuard)
-  @Roles("USER", "ADMIN")
+  @Roles("USER")
   async createOrder(@Body() body: CreateOrderDto, @User() user: loggedUser) {
     return await this.ordersService.createOrder(body as any, user.id);
   }
 
   @Get("/")
   @UseGuards(AuthGuard)
+  @Roles("USER")
   async getOrders(@Query() query: GetOrdersDto, @User() user: loggedUser) {
     return await this.ordersService.getOrders(query, user.id);
   }

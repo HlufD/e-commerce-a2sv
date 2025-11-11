@@ -10,49 +10,52 @@ export class OrderPrismaRepositoryImpl implements IOrderRepository {
   async create(order: Order, userId: string): Promise<Order> {
     try {
       const productIds = order.products.map((p) => p.id);
-      const productsInDb = await this.prismaService.product.findMany({
-        where: { id: { in: productIds } },
-      });
 
-      let totalPrice = 0;
+      return await this.prismaService.$transaction(async (prisma) => {
+        const productsInDb = await prisma.product.findMany({
+          where: { id: { in: productIds } },
+        });
 
-      for (const orderItem of order.products) {
-        const product = productsInDb.find((p) => p.id === orderItem.id);
-        if (!product) {
-          throw new Error(`Product with id ${orderItem.id} not found`);
+        let totalPrice = 0;
+
+        for (const orderItem of order.products) {
+          const product = productsInDb.find((p) => p.id === orderItem.id);
+          if (!product) {
+            throw new Error(`Product with id ${orderItem.id} not found`);
+          }
+
+          const quantity = (orderItem as any).quantity;
+          if (quantity > product.stock) {
+            throw new Error(
+              `Insufficient stock for product "${product.name}". Requested: ${quantity}, Available: ${product.stock}`
+            );
+          }
+
+          totalPrice += product.price * quantity;
         }
 
-        if (orderItem.stock > product.stock) {
-          throw new Error(
-            `Product "${product.name}" is out of stock or insufficient quantity`
-          );
-        }
-
-        totalPrice += product.price * (orderItem as any).quantity;
-      }
-
-      await Promise.all(
-        order.products.map((orderItem) =>
-          this.prismaService.product.update({
+        for (const orderItem of order.products) {
+          const quantity = (orderItem as any).quantity;
+          await prisma.product.update({
             where: { id: orderItem.id },
-            data: { stock: { decrement: (orderItem as any).quantity } },
-          })
-        )
-      );
+            data: { stock: { decrement: quantity } },
+          });
+        }
 
-      return await this.prismaService.order.create({
-        data: {
-          userId,
-          description: "This is a new order",
-          totalPrice,
-          status: "PENDING",
-          products: {
-            connect: order.products.map((product) => ({ id: product.id })),
+        return await prisma.order.create({
+          data: {
+            userId,
+            description: "This is a new order",
+            totalPrice,
+            status: "PENDING",
+            products: {
+              connect: order.products.map((p) => ({ id: p.id })),
+            },
           },
-        },
-        include: {
-          products: true,
-        },
+          include: {
+            products: true,
+          },
+        });
       });
     } catch (error) {
       console.error(error);

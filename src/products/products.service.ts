@@ -72,7 +72,7 @@ export class ProductsService {
       if (!product) throw new NotFoundException("Product not found");
       return {
         status: 200,
-        message: "Product found successfully",
+        message: "Product fetched successfully",
         data: product,
       };
     } catch (error) {
@@ -93,7 +93,7 @@ export class ProductsService {
 
       return {
         status: 200,
-        message: "Products found successfully",
+        message: "Products fetched successfully",
         data,
         ...rest,
       };

@@ -8,15 +8,22 @@ import {
   Min,
   IsOptional,
   IsUUID,
+  Length,
 } from "class-validator";
 
 class CreateProductDto {
   @IsString({ message: "Product name must be a valid string" })
   @IsNotEmpty({ message: "Product name is required" })
+  @Length(3, 100, {
+    message: "Product name must be between 3 and 100 characters",
+  })
   name: string;
 
   @IsString({ message: "Product description must be a valid string" })
   @IsNotEmpty({ message: "Product description is required" })
+  @Length(10, 1000, {
+    message: "Product description must be at least 10 characters long",
+  })
   description: string;
 
   @IsNumber({}, { message: "Price must be a valid number" })
