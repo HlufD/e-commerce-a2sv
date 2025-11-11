@@ -7,6 +7,7 @@ import {
   Post,
   Put,
   Query,
+  UploadedFile,
   UseGuards,
 } from "@nestjs/common";
 import { ProductsService } from "./products.service";
@@ -21,6 +22,7 @@ import { Product } from "generated/prisma";
 import { User } from "src/auth/decorators/logged-user.decorator";
 import { User as loggedUser } from "src/auth/domain/entities/user.entity";
 import { AuthGuard } from "src/auth/guard/auth.guard";
+import { UploadFile } from "./decorators/file-upload.decorator";
 
 @Controller("products")
 export class ProductsController {
@@ -29,19 +31,38 @@ export class ProductsController {
   @Post("/")
   @Roles(Role.ADMIN)
   @UseGuards(AuthGuard)
+  @UploadFile({ fieldName: "image", folder: "products", maxSizeMB: 2 })
   async createProduct(
+    @UploadedFile() file: Express.Multer.File,
     @Body() body: CreateProductDto,
-    @User() user: loggedUser,
+    @User() user: loggedUser
   ) {
-    return this.productsService.createProduct(body as Product, user.id);
+    const product: Product = {
+      ...body,
+      imageUrl: file
+        ? `${process.env.BASE_SERVER_URL}/uploads/products/${file.filename}`
+        : null,
+    } as Product;
+
+    return this.productsService.createProduct(product, user.id);
   }
 
   @Put("/:id")
   @Roles(Role.ADMIN)
   @UseGuards(AuthGuard)
-  async updateProduct(@Body() body: UpdateProductDto, @Param("id") id: string) {
-    console.log(id);
-    return this.productsService.updateProduct(body, id);
+  @UploadFile({ fieldName: "image", folder: "products", maxSizeMB: 2 })
+  async updateProduct(
+    @UploadedFile() file: Express.Multer.File,
+    @Body() body: UpdateProductDto,
+    @Param("id") id: string
+  ) {
+    const product: Product = {
+      ...body,
+      imageUrl: file
+        ? `${process.env.BASE_SERVER_URL}/uploads/products/${file.filename}`
+        : null,
+    } as Product;
+    return this.productsService.updateProduct(product, id);
   }
 
   @Delete("/:id")

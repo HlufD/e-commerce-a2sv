@@ -10,12 +10,13 @@ import { Product } from "./domain/entities/product.entity";
 export class ProductsService {
   constructor(
     @Inject(IProductRepositoryToken)
-    private readonly productRepository: IProductRepository,
+    private readonly productRepository: IProductRepository
   ) {}
 
   async createProduct(payload: Product, userId: string) {
     try {
       const product = await this.productRepository.create(payload, userId);
+      console.log(payload);
       return {
         status: 201,
         message: "Product created successfully",
@@ -88,7 +89,7 @@ export class ProductsService {
       const { data, ...rest } = await this.productRepository.findAll(
         page,
         limit,
-        search,
+        search
       );
 
       return {

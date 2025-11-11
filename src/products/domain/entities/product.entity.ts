@@ -7,6 +7,7 @@ export class Product {
   price: number;
   stock: number;
   category: string;
+  imageUrl?: string | null;
   userId: string;
   user?: User;
   orders?: [];

@@ -3,6 +3,8 @@ import { AppModule } from "./app.module";
 import { SwaggerModule, DocumentBuilder } from "@nestjs/swagger";
 import { ValidationPipe } from "@nestjs/common";
 import { GlobalExceptionFilter } from "./shared/exceptions/global-exception.filter";
+import express from "express";
+import { join } from "node:path";
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -22,9 +24,10 @@ async function bootstrap() {
       whitelist: true,
       forbidNonWhitelisted: true,
       transform: true,
-    }),
+    })
   );
 
+  app.use("/uploads", express.static(join(__dirname, "..", "uploads")));
   app.useGlobalFilters(new GlobalExceptionFilter());
 
   await app.listen(PORT, () => {

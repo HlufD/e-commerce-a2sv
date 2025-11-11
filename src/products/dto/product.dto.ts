@@ -26,10 +26,12 @@ class CreateProductDto {
   })
   description: string;
 
+  @Type(() => Number)
   @IsNumber({}, { message: "Price must be a valid number" })
   @IsPositive({ message: "Price must be greater than zero" })
   price: number;
 
+  @Type(() => Number)
   @IsInt({ message: "Stock must be an integer" })
   @Min(0, { message: "Stock cannot be negative" })
   stock: number;
@@ -47,12 +49,13 @@ class UpdateProductDto {
   @IsOptional()
   @IsString({ message: "Product description must be a valid string" })
   description?: string;
-
+  @Type(() => Number)
   @IsOptional()
   @IsNumber({}, { message: "Price must be a valid number" })
   @IsPositive({ message: "Price must be greater than zero" })
   price?: number;
 
+  @Type(() => Number)
   @IsOptional()
   @IsInt({ message: "Stock must be an integer" })
   @Min(0, { message: "Stock cannot be negative" })

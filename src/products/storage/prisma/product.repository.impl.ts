@@ -3,7 +3,6 @@ import { Prisma } from "generated/prisma";
 import { PrismaService } from "src/prisma/prisma.service";
 import { Product } from "src/products/domain/entities/product.entity";
 import { IProductRepository } from "src/products/domain/interfaces/product.repository";
-import { UpdateProductDto } from "src/products/dto/product.dto";
 import { PaginatedResponse, Paginator } from "src/shared/utils/paginator";
 
 @Injectable()
@@ -11,7 +10,7 @@ export class ProductPrismaRepository implements IProductRepository {
   constructor(private readonly prismaService: PrismaService) {}
   async create(product: Product, userId: string): Promise<Product> {
     try {
-      const { name, description, price, stock, category } = product;
+      const { name, description, price, stock, category, imageUrl } = product;
 
       return await this.prismaService.product.create({
         data: {
@@ -20,6 +19,7 @@ export class ProductPrismaRepository implements IProductRepository {
           price,
           stock: Number(stock) || 0,
           category,
+          imageUrl,
           user: {
             connect: { id: userId },
           },
@@ -42,7 +42,7 @@ export class ProductPrismaRepository implements IProductRepository {
   async findAll(
     page = 1,
     limit = 10,
-    search?: string,
+    search?: string
   ): Promise<PaginatedResponse<Product>> {
     try {
       const where: Prisma.ProductWhereInput =
@@ -65,7 +65,7 @@ export class ProductPrismaRepository implements IProductRepository {
           }),
         () => this.prismaService.product.count({ where }),
         page,
-        limit,
+        limit
       );
     } catch (error) {
       console.log(error);
@@ -73,7 +73,10 @@ export class ProductPrismaRepository implements IProductRepository {
     }
   }
 
-  async update(id: string, product: UpdateProductDto): Promise<Product> {
+  async update(
+    id: string,
+    product: Omit<Product, "user" | "orders">
+  ): Promise<Product> {
     try {
       return await this.prismaService.product.update({
         where: { id },
@@ -84,6 +87,7 @@ export class ProductPrismaRepository implements IProductRepository {
       throw error;
     }
   }
+
   async delete(id: string): Promise<void> {
     try {
       await this.prismaService.product.delete({ where: { id } });
