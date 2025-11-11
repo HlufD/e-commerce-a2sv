@@ -9,7 +9,7 @@ import { LoginDto, SignupDto } from "./dto/auth.dto";
 import {
   IUserRepositoryToken,
   type IUserRepository,
-} from "./domain/interfaces/user.repository.interface";
+} from "./domain/interfaces/user.repository";
 import {
   IHashingServiceToken,
   type IHashingService,
@@ -76,8 +76,10 @@ export class AuthService {
       email: user.email,
       role: user.role,
     };
+
     const jwtToke = await this.jwtService.sign(data, {
       secret: process.env.JWT_SECRET,
+      expiresIn: "1d",
     });
 
     return {

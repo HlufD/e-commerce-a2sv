@@ -1,7 +1,7 @@
 import { Module } from "@nestjs/common";
 import { AuthController } from "./auth.controller";
 import { AuthService } from "./auth.service";
-import { IUserRepositoryToken } from "./domain/interfaces/user.repository.interface";
+import { IUserRepositoryToken } from "./domain/interfaces/user.repository";
 import { AuthPrismaRepository } from "./storage/prisma/auth.repository.impl";
 import { IHashingServiceToken } from "src/shared/interfaces/IHashingService";
 import { HashingServiceImpl } from "src/shared/utils/hashing.service";
@@ -9,6 +9,7 @@ import { SharedModule } from "src/shared/shared.module";
 import { PrismaModule } from "src/prisma/prisma.module";
 import { IJwtServiceToken } from "src/shared/interfaces/IJwtService";
 import { JwtServiceImpl } from "src/shared/utils/jwt.service";
+import { AuthGuard } from "./guard/auth.guard";
 
 @Module({
   imports: [SharedModule, PrismaModule],
@@ -27,6 +28,8 @@ import { JwtServiceImpl } from "src/shared/utils/jwt.service";
       provide: IJwtServiceToken,
       useClass: JwtServiceImpl,
     },
+    AuthGuard,
   ],
+  exports: [AuthGuard, IJwtServiceToken],
 })
 export class AuthModule {}

@@ -1,9 +1,9 @@
-import { JwtSignOptions } from '@nestjs/jwt';
+import { JwtSignOptions, JwtVerifyOptions } from "@nestjs/jwt";
 
 export interface IJwtService {
   sign(payload: any, options?: JwtSignOptions);
 
-  verify<T extends object = any>(token: string): T;
+  verify<T extends object = any>(token: string, options: JwtVerifyOptions): T;
 }
 
-export const IJwtServiceToken = Symbol('IJwtService');
+export const IJwtServiceToken = Symbol("IJwtService");
