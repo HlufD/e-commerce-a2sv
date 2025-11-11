@@ -41,7 +41,7 @@ model Order {
   id          String    @id @default(uuid())
   userId      String
   user        User      @relation(fields: [userId], references: [id])
-  description String
+  description String?
   totalPrice  Float
   status      String
   products    Product[] @relation("OrderProducts")
